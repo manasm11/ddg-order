@@ -1,5 +1,7 @@
 # Importing Module
 import xlrd
+from fastapi import FastAPI
+from fastapi.responses import FileResponse
 
 
 def parse_stock_excel(filepath: str):
@@ -31,7 +33,18 @@ def parse_stock_excel(filepath: str):
     return result
 
 
+app = FastAPI()
+
+
+@app.get("/")
+async def root():
+    return FileResponse("index.html")
+
+
 if __name__ == "__main__":
-    result = parse_stock_excel("temp/STOCK_SAMPLE.XLS")
-    {print(d) for d in result}
-    print("Length:", len(result))
+    import uvicorn
+
+    # result = parse_stock_excel("temp/STOCK_SAMPLE.XLS")
+    # {print(d) for d in result}
+    # print("Length:", len(result))
+    uvicorn.run("main:app", host="0.0.0.0", port=80, log_level="debug", reload=True)

@@ -1,1 +1,3 @@
 xlrd
+fastapi
+uvicorn[standard]
