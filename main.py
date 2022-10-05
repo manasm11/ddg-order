@@ -2,6 +2,7 @@
 import xlrd
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 
 def parse_stock_excel(filepath: str):
@@ -9,11 +10,10 @@ def parse_stock_excel(filepath: str):
     wb = xlrd.open_workbook(filepath)
     # Storing the first sheet into a variable
     sheet: xlrd.sheet.Sheet = wb.sheet_by_index(0)
+    # Defining column variables
     ITEM = 0
     QTY = 1
     MRP = 2
-    is_data_row = False
-    result = list()
 
     def is_positive_num(cell: xlrd.sheet.Cell):
         v = cell.value
@@ -21,6 +21,7 @@ def parse_stock_excel(filepath: str):
         return v and s.strip() and s.replace(".", "", 1).isdigit() and float(v) > 0
 
     # Iterating over all rows
+    result = list()
     for row in sheet.get_rows():
         if is_positive_num(row[QTY]) and is_positive_num(row[MRP]):
             result.append(
@@ -39,6 +40,9 @@ app = FastAPI()
 @app.get("/")
 async def root():
     return FileResponse("index.html")
+
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 if __name__ == "__main__":
