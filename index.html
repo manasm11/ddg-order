@@ -1,148 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/static/index.css" />
-    <title>DDG Order</title>
-  </head>
 
-  <script>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/static/index.css" />
+  <title>DDG Order</title>
+</head>
 
-  </script>
+<script></script>
 
-  <body>
-    <form action="https://google.com">
-      <h1 class="mt-12 font-extrabold text-center text-3xl">Durga Dawa Ghar</h1>
-      <h1 class="text-center text-2xl font-mono">Order</h1>
-      <div id="party-details" class="m-12">
-        <div class="relative mt-4">
-          <input
-            type="text"
-            name="name"
-            id="name"
-            class="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-pink-600 placeholder-transparent"
-            placeholder="Shop Name"
-          />
-          <label
-            for="name"
-            class="absolute -top-3.5 left-0 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm"
-          >
-            Shop Name
-          </label>
-        </div>
-        <div class="relative mt-4">
-          <input
-            list="regions"
-            name="region"
-            id="region"
-            placeholder="Region"
-            class="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-pink-600 placeholder-transparent"
-          />
-          <label
-            for="region"
-            class="absolute -top-3.5 left-0 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm"
-          >
-            Region
-          </label>
-        </div>
-        <div class="relative mt-4">
-          <input
-            type="number"
-            name="contact"
-            id="contact"
-            placeholder="Phone No."
-            class="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-pink-600 placeholder-transparent"
-          />
-          <label
-            for="contact"
-            class="absolute -top-3.5 left-0 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm"
-          >
-            Phone No.
-          </label>
-        </div>
+<body>
+  <form>
+    <h1 class="mt-12 font-extrabold text-center text-3xl">Durga Dawa Ghar</h1>
+    <h1 class="text-center text-2xl font-mono">Order</h1>
+    <div id="party-details" class="m-12">
+      <div class="relative mt-4">
+        <input type="text" name="name" id="name"
+          class="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-pink-600 placeholder-transparent"
+          placeholder="." />
+        <label for="name"
+          class="absolute -top-3.5 left-0 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">
+          Shop Name
+        </label>
       </div>
-    </form>
+      <div class="relative mt-4">
+        <input list="regions" name="region" id="region" placeholder="."
+          class="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-pink-600 placeholder-transparent" />
+        <label for="region"
+          class="absolute -top-3.5 left-0 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">
+          Region
+        </label>
+      </div>
+      <div class="relative mt-4">
+        <input type="number" name="contact" id="contact" placeholder="."
+          class="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-pink-600 placeholder-transparent" />
+        <label for="contact"
+          class="absolute -top-3.5 left-0 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">
+          Phone No.
+        </label>
+      </div>
+    </div>
 
+    <h3 class="text-xl ml-4">Add Product</h3>
+    <div class="relative m-4">
+      <input type="text" name="search" id="search" placeholder="."
+        class="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-pink-600 placeholder-transparent" />
+      <label for="contact"
+        class="absolute -top-3.5 left-0 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">
+        Search Product
+      </label>
+    </div>
+  </form>
 
+  <datalist id="regions">
+    <option value="ACHALGANJ"></option>
+    <option value="AGAUS"></option>
+    <option value="AKBARPUR"></option>
+    <option value="ALLAHABAD"></option>
+    <option value="ASALAT GANJ"></option>
+    <option value="AUNAHA"></option>
+    <option value="AURAIYA"></option>
+    <option value="BANDA"></option>
+    <option value="BANGARMAU"></option>
+    <option value="BARASAROHI"></option>
+    <option value="BEEGAHPUR"></option>
+    <option value="BHAGHPUR"></option>
+    <option value="BHAUPUR"></option>
+    <option value="BHITAR GAON"></option>
+    <option value="BIGHAPUR"></option>
+    <option value="BILINDA"></option>
+    <option value="BIRHANA ROAD"></option>
+    <option value="BITHOOR"></option>
+    <option value="CHAUDAGRA"></option>
+    <option value="CHIBRAMAU"></option>
+    <option value="DAHI CHOWKI"></option>
+    <option value="DERAPUR"></option>
+    <option value="DHATA"></option>
+    <option value="DIBIAPUR"></option>
+    <option value="ETAWAH"></option>
+    <option value="FARIDPUR"></option>
+    <option value="FARRUKHABAD"></option>
+    <option value="FATEHPUR"></option>
+    <option value="FAZALGANJ"></option>
+    <option value="GORAKHPUR"></option>
+    <option value="GUJANI"></option>
+    <option value="GURSAHAYAN"></option>
+    <option value="HAIDRABAD"></option>
+    <option value="HAMEERPUR"></option>
+    <option value="HARDOI"></option>
+    <option value="JALLAUN"></option>
+    <option value="JHANSI"></option>
+    <option value="JUNIHA"></option>
+    <option value="KANNAUJ"></option>
+    <option value="KANPUR"></option>
+    <option value="KARWI"></option>
+    <option value="KIDWAI"></option>
+    <option value="KONCH"></option>
+    <option value="KUDNI"></option>
+    <option value="MADHAVGANJ"></option>
+    <option value="MAHOBA"></option>
+    <option value="MALWA"></option>
+    <option value="MANIMAU"></option>
+    <option value="MAQSUDABAD"></option>
+    <option value="MUNGISAPUR"></option>
+    <option value="NOONARI"></option>
+    <option value="ORAI"></option>
+    <option value="PATAN"></option>
+    <option value="PATARA"></option>
+    <option value="PUKHRAYAN"></option>
+    <option value="PUNJAB"></option>
+    <option value="PURWA"></option>
+    <option value="RAATH"></option>
+    <option value="RAMA DEVI"></option>
+    <option value="RAMAIPUR"></option>
+    <option value="RASULABAD"></option>
+    <option value="REWADI"></option>
+    <option value="ROOMA"></option>
+    <option value="SAFIPUR"></option>
+    <option value="SAHLI"></option>
+    <option value="SAJETI"></option>
+    <option value="SHAMBHUA"></option>
+    <option value="SHANKAR"></option>
+    <option value="SWAROOP NAGAR"></option>
+    <option value="TAUS"></option>
+    <option value="TIKRA"></option>
+    <option value="TIRWA"></option>
+    <option value="UMARDA"></option>
+    <option value="UNNAO"></option>
+    <option value="VISHDHAN"></option>
+  </datalist>
+</body>
+<script>
+  function filterFunction() {
+    var input, filter, ul, li, a, i;
+    input = document.getElementById("item-search");
+    filter = input.value.toUpperCase();
+    div = document.getElementById("myDropdown");
+    a = div.getElementsByTagName("a");
+    for (i = 0; i < a.length; i++) {
+      txtValue = a[i].textContent || a[i].innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        a[i].style.display = "";
+      } else {
+        a[i].style.display = "none";
+      }
+    }
+  }
+</script>
 
-    <datalist id="regions">
-      <option value="ACHALGANJ"></option>
-      <option value="AGAUS"></option>
-      <option value="AKBARPUR"></option>
-      <option value="ALLAHABAD"></option>
-      <option value="ASALAT GANJ"></option>
-      <option value="AUNAHA"></option>
-      <option value="AURAIYA"></option>
-      <option value="BANDA"></option>
-      <option value="BANGARMAU"></option>
-      <option value="BARASAROHI"></option>
-      <option value="BEEGAHPUR"></option>
-      <option value="BHAGHPUR"></option>
-      <option value="BHAUPUR"></option>
-      <option value="BHITAR GAON"></option>
-      <option value="BIGHAPUR"></option>
-      <option value="BILINDA"></option>
-      <option value="BIRHANA ROAD"></option>
-      <option value="BITHOOR"></option>
-      <option value="CHAUDAGRA"></option>
-      <option value="CHIBRAMAU"></option>
-      <option value="DAHI CHOWKI"></option>
-      <option value="DERAPUR"></option>
-      <option value="DHATA"></option>
-      <option value="DIBIAPUR"></option>
-      <option value="ETAWAH"></option>
-      <option value="FARIDPUR"></option>
-      <option value="FARRUKHABAD"></option>
-      <option value="FATEHPUR"></option>
-      <option value="FAZALGANJ"></option>
-      <option value="GORAKHPUR"></option>
-      <option value="GUJANI"></option>
-      <option value="GURSAHAYAN"></option>
-      <option value="HAIDRABAD"></option>
-      <option value="HAMEERPUR"></option>
-      <option value="HARDOI"></option>
-      <option value="JALLAUN"></option>
-      <option value="JHANSI"></option>
-      <option value="JUNIHA"></option>
-      <option value="KANNAUJ"></option>
-      <option value="KANPUR"></option>
-      <option value="KARWI"></option>
-      <option value="KIDWAI"></option>
-      <option value="KONCH"></option>
-      <option value="KUDNI"></option>
-      <option value="MADHAVGANJ"></option>
-      <option value="MAHOBA"></option>
-      <option value="MALWA"></option>
-      <option value="MANIMAU"></option>
-      <option value="MAQSUDABAD"></option>
-      <option value="MUNGISAPUR"></option>
-      <option value="NOONARI"></option>
-      <option value="ORAI"></option>
-      <option value="PATAN"></option>
-      <option value="PATARA"></option>
-      <option value="PUKHRAYAN"></option>
-      <option value="PUNJAB"></option>
-      <option value="PURWA"></option>
-      <option value="RAATH"></option>
-      <option value="RAMA DEVI"></option>
-      <option value="RAMAIPUR"></option>
-      <option value="RASULABAD"></option>
-      <option value="REWADI"></option>
-      <option value="ROOMA"></option>
-      <option value="SAFIPUR"></option>
-      <option value="SAHLI"></option>
-      <option value="SAJETI"></option>
-      <option value="SHAMBHUA"></option>
-      <option value="SHANKAR"></option>
-      <option value="SWAROOP NAGAR"></option>
-      <option value="TAUS"></option>
-      <option value="TIKRA"></option>
-      <option value="TIRWA"></option>
-      <option value="UMARDA"></option>
-      <option value="UNNAO"></option>
-      <option value="VISHDHAN"></option>
-    </datalist>
-  </body>
 </html>
