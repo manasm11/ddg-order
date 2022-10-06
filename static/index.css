@@ -551,16 +551,349 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+.top-0 {
+  top: 0px;
+}
+
+.left-0 {
+  left: 0px;
+}
+
+.-top-0 {
+  top: -0px;
+}
+
+.-top-3\.5 {
+  top: -0.875rem;
+}
+
+.-top-3 {
+  top: -0.75rem;
+}
+
+.m-12 {
+  margin: 3rem;
+}
+
+.mt-12 {
+  margin-top: 3rem;
+}
+
+.ml-12 {
+  margin-left: 3rem;
+}
+
+.mt-8 {
+  margin-top: 2rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.h-10 {
+  height: 2.5rem;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.border {
+  border-width: 1px;
+}
+
+.border-b-2 {
+  border-bottom-width: 2px;
+}
+
+.border-gray-300 {
+  --tw-border-opacity: 1;
+  border-color: rgb(209 213 219 / var(--tw-border-opacity));
+}
+
+.bg-pink-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(252 231 243 / var(--tw-bg-opacity));
+}
+
+.bg-pink-50 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(253 242 248 / var(--tw-bg-opacity));
+}
+
+.bg-gradient-to-t {
+  background-image: linear-gradient(to top, var(--tw-gradient-stops));
+}
+
+.p-8 {
+  padding: 2rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.font-serif {
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+}
+
+.font-sans {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+.font-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
 .text-3xl {
   font-size: 1.875rem;
   line-height: 2.25rem;
 }
 
-.font-bold {
-  font-weight: 700;
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
 }
 
-.underline {
-  -webkit-text-decoration-line: underline;
-          text-decoration-line: underline;
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.font-extrabold {
+  font-weight: 800;
+}
+
+.text-gray-900 {
+  --tw-text-opacity: 1;
+  color: rgb(17 24 39 / var(--tw-text-opacity));
+}
+
+.text-red-500 {
+  --tw-text-opacity: 1;
+  color: rgb(239 68 68 / var(--tw-text-opacity));
+}
+
+.text-red-700 {
+  --tw-text-opacity: 1;
+  color: rgb(185 28 28 / var(--tw-text-opacity));
+}
+
+.text-pink-700 {
+  --tw-text-opacity: 1;
+  color: rgb(190 24 93 / var(--tw-text-opacity));
+}
+
+.text-pink-500 {
+  --tw-text-opacity: 1;
+  color: rgb(236 72 153 / var(--tw-text-opacity));
+}
+
+.text-gray-600 {
+  --tw-text-opacity: 1;
+  color: rgb(75 85 99 / var(--tw-text-opacity));
+}
+
+.placeholder-transparent::-moz-placeholder {
+  color: transparent;
+}
+
+.placeholder-transparent::placeholder {
+  color: transparent;
+}
+
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.focus\:border-green-600:focus {
+  --tw-border-opacity: 1;
+  border-color: rgb(22 163 74 / var(--tw-border-opacity));
+}
+
+.focus\:border-red-600:focus {
+  --tw-border-opacity: 1;
+  border-color: rgb(220 38 38 / var(--tw-border-opacity));
+}
+
+.focus\:border-pink-600:focus {
+  --tw-border-opacity: 1;
+  border-color: rgb(219 39 119 / var(--tw-border-opacity));
+}
+
+.focus\:outline-none:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.focus\:outline-4:focus {
+  outline-width: 4px;
+}
+
+.peer:-moz-placeholder-shown ~ .peer-placeholder-shown\:top-2 {
+  top: 0.5rem;
+}
+
+.peer:placeholder-shown ~ .peer-placeholder-shown\:top-2 {
+  top: 0.5rem;
+}
+
+.peer:-moz-placeholder-shown ~ .peer-placeholder-shown\:text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.peer:placeholder-shown ~ .peer-placeholder-shown\:text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.peer:-moz-placeholder-shown ~ .peer-placeholder-shown\:uppercase {
+  text-transform: uppercase;
+}
+
+.peer:placeholder-shown ~ .peer-placeholder-shown\:uppercase {
+  text-transform: uppercase;
+}
+
+.peer:-moz-placeholder-shown ~ .peer-placeholder-shown\:text-gray-400 {
+  --tw-text-opacity: 1;
+  color: rgb(156 163 175 / var(--tw-text-opacity));
+}
+
+.peer:placeholder-shown ~ .peer-placeholder-shown\:text-gray-400 {
+  --tw-text-opacity: 1;
+  color: rgb(156 163 175 / var(--tw-text-opacity));
+}
+
+.peer:focus ~ .peer-focus\:-top-3\.5 {
+  top: -0.875rem;
+}
+
+.peer:focus ~ .peer-focus\:-top-3 {
+  top: -0.75rem;
+}
+
+.peer:focus ~ .peer-focus\:left-0 {
+  left: 0px;
+}
+
+.peer:focus ~ .peer-focus\:text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.peer:focus ~ .peer-focus\:text-gray-600 {
+  --tw-text-opacity: 1;
+  color: rgb(75 85 99 / var(--tw-text-opacity));
+}
+
+@media (min-width: 768px) {
+  .md\:m-12 {
+    margin: 3rem;
+  }
+}
+
+.\[\&\>input\]\:h-10>input {
+  height: 2.5rem;
+}
+
+.\[\&\>input\]\:w-full>input {
+  width: 100%;
+}
+
+.\[\&\>input\]\:border>input {
+  border-width: 1px;
+}
+
+.\[\&\>input\]\:border-b-2>input {
+  border-bottom-width: 2px;
+}
+
+.\[\&\>input\]\:border-gray-300>input {
+  --tw-border-opacity: 1;
+  border-color: rgb(209 213 219 / var(--tw-border-opacity));
+}
+
+.\[\&\>input\]\:text-gray-900>input {
+  --tw-text-opacity: 1;
+  color: rgb(17 24 39 / var(--tw-text-opacity));
+}
+
+.\[\&\>input\]\:placeholder-transparent>input::-moz-placeholder {
+  color: transparent;
+}
+
+.\[\&\>input\]\:placeholder-transparent>input::placeholder {
+  color: transparent;
+}
+
+.\[\&\>input\]\:focus\:border-pink-600:focus>input {
+  --tw-border-opacity: 1;
+  border-color: rgb(219 39 119 / var(--tw-border-opacity));
+}
+
+.\[\&\>input\]\:focus\:outline-none:focus>input {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.\[\&input\]\:h-10input {
+  height: 2.5rem;
+}
+
+.\[\&input\]\:w-fullinput {
+  width: 100%;
+}
+
+.\[\&input\]\:border-b-2input {
+  border-bottom-width: 2px;
+}
+
+.\[\&input\]\:border-gray-300input {
+  --tw-border-opacity: 1;
+  border-color: rgb(209 213 219 / var(--tw-border-opacity));
+}
+
+.\[\&input\]\:text-gray-900input {
+  --tw-text-opacity: 1;
+  color: rgb(17 24 39 / var(--tw-text-opacity));
+}
+
+.\[\&input\]\:placeholder-transparentinput::-moz-placeholder {
+  color: transparent;
+}
+
+.\[\&input\]\:placeholder-transparentinput::placeholder {
+  color: transparent;
+}
+
+.\[\&input\]\:focus\:border-pink-600:focusinput {
+  --tw-border-opacity: 1;
+  border-color: rgb(219 39 119 / var(--tw-border-opacity));
+}
+
+.\[\&input\]\:focus\:outline-none:focusinput {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
 }
