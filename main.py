@@ -1,11 +1,39 @@
 # Importing Module
+import json
 import xlrd
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Form
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 templates = Jinja2Templates(directory=".")
+
+
+app = FastAPI()
+
+
+@app.get("/")
+async def root(request: Request):
+    return templates.TemplateResponse(
+        "index.html",
+        context={
+            "regions": regions,
+            "request": request,
+            "products": parse_stock_excel("temp/STOCK_SAMPLE.XLS"),
+        },
+    )
+
+
+@app.post("/order")
+async def order(
+    name: str = Form(), region: str = Form(), contact: str = Form(), items: str = Form()
+):
+    items = json.loads(items)
+    print(f"name={name}, region={region}, contact={contact}, items={items}")
+    return FileResponse("order_placed.html")
+
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 def parse_stock_excel(filepath: str):
@@ -35,17 +63,6 @@ def parse_stock_excel(filepath: str):
                 }
             )
     return result
-
-
-app = FastAPI()
-
-
-@app.get("/")
-async def root(request: Request):
-    return templates.TemplateResponse("index.html", context={"regions": regions, "request": request, "products": parse_stock_excel("temp/STOCK_SAMPLE.XLS")})
-
-
-app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 if __name__ == "__main__":

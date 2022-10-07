@@ -10,7 +10,7 @@
 </head>
 
 <body>
-  <form>
+  <form action="/order" method="POST">
     <h1 class="mt-12 font-extrabold text-center text-3xl">Durga Dawa Ghar</h1>
     <h1 class="text-center text-2xl font-mono">Order</h1>
     <div id="party-details" class="m-12">
@@ -41,9 +41,11 @@
       </div>
     </div>
 
+    <input class="hidden" type="text" name="items" id="items">
+
     <h3 class="text-xl text-center underline">Your Order</h3>
 
-    <div id="order" class="border border-gray-400 m-4 rounded even:bg-gray-400">
+    <div id="order" class="border border-gray-400 m-4 rounded">
     </div>
     <center>
       <button id="submit" class="hidden w-4/5 bg-green-700 text-white rounded text-center py-2">Submit</button>
@@ -102,6 +104,8 @@
       if (order[item] < 1) continue;
       if (!order[item]) continue;
 
+      document.getElementById("items").value = JSON.stringify(order);
+
       totalQty += order[item];
       // QTY element
       const qty = document.createElement("input");
@@ -115,8 +119,8 @@
       remove.innerText = "X";
       remove.classList.add("w-8", "h-8", "text-white", "bg-red-500", "rounded", "text-center", "hover:bg-red-200", "cursor-pointer");
       remove.onclick = () => {
-        if (confirm(`Remove "${item}"" ?`)) {
-          order[item] = undefined
+        if (confirm(`Remove "${item}" from order ?`)) {
+          delete order[item]
           updateorder()
         }
       }
@@ -131,7 +135,7 @@
       itemDive.innerText = item;
 
       const d = document.createElement("div");
-      d.classList.add("even:bg-gray-200", "p-2")
+      d.classList.add("flex" ,"justify-between", "even:bg-gray-200", "p-2")
       d.appendChild(itemDive);
       d.appendChild(qty_remove);
 
