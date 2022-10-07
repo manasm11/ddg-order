@@ -9,16 +9,14 @@
   <title>DDG Order</title>
 </head>
 
-<script></script>
-
 <body>
   <form>
     <h1 class="mt-12 font-extrabold text-center text-3xl">Durga Dawa Ghar</h1>
     <h1 class="text-center text-2xl font-mono">Order</h1>
     <div id="party-details" class="m-12">
       <div class="relative mt-4">
-        <input type="text" name="name" id="name"
-          class="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-pink-600 placeholder-transparent"
+        <input type="text" name="name" id="name" required
+          class="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-green-600 placeholder-transparent"
           placeholder="." />
         <label for="name"
           class="absolute -top-3.5 left-0 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">
@@ -26,16 +24,16 @@
         </label>
       </div>
       <div class="relative mt-4">
-        <input list="regions" name="region" id="region" placeholder="."
-          class="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-pink-600 placeholder-transparent" />
+        <input list="regions" name="region" id="region" placeholder="." required
+          class="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-green-600 placeholder-transparent" />
         <label for="region"
           class="absolute -top-3.5 left-0 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">
           Region
         </label>
       </div>
       <div class="relative mt-4">
-        <input type="number" name="contact" id="contact" placeholder="."
-          class="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-pink-600 placeholder-transparent" />
+        <input type="number" name="contact" id="contact" placeholder="." required
+          class="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-green-600 placeholder-transparent" />
         <label for="contact"
           class="absolute -top-3.5 left-0 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">
           Phone No.
@@ -43,16 +41,24 @@
       </div>
     </div>
 
-    <h3 class="text-xl ml-4">Add Product</h3>
+    <h3 class="text-xl text-center underline">Your Order</h3>
+
+    <div id="order" class="border border-gray-400 m-4 rounded even:bg-gray-400">
+    </div>
+    <center>
+      <button id="submit" class="hidden w-4/5 bg-green-700 text-white rounded text-center py-2">Submit</button>
+    </center>
+
+    <h3 class="text-xl ml-4 mt-8 underline font-bold text-center">Search Product</h3>
     <div class="relative m-4">
-      <input type="text" name="search" id="search" placeholder="." onfocus="showproducts()" onblur="hideproducts()" oninput="showproducts()"
-        class="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-pink-600 placeholder-transparent" />
+      <input type="text" name="search" id="search" placeholder="." onfocus="showproducts()" oninput="showproducts()"
+        class="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-green-600 placeholder-transparent" />
       <label for="contact"
         class="absolute -top-3.5 left-0 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">
         Search Product
       </label>
       <div id="products-list"
-        class="absolute left-0 w-full z-10 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden"
+        class="absolute left-0 w-full z-10 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
         role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
       </div>
   </form>
@@ -66,40 +72,89 @@
 {% block javascript %}
 
 <script>
+  const order = {};
   function showproducts() {
-    updateproducts()
-    document.getElementById("products-list").classList.remove("hidden")
+    updateproducts();
   }
   function hideproducts() {
-    document.getElementById("products-list").classList.add("hidden")
+    document.getElementById("products-list").innerHTML = "";
+  }
+
+  function addproduct(item) {
+    return () => {
+      if (order[item] == undefined) {
+        order[item] = 1;
+      }
+      else {
+        order[item] += 1;
+      }
+      updateorder();
+      hideproducts();
+    }
+  }
+
+  function updateorder() {
+    var totalQty = 0;
+    const o = document.getElementById("order");
+    o.innerHTML = "";
+    console.log(order);
+    for (const item in order) {
+      if (order[item] < 1) continue;
+      if (!order[item]) continue;
+
+      totalQty += order[item];
+      // QTY element
+      const qty = document.createElement("input");
+      qty.type = "number";
+      qty.value = order[item];
+      qty.classList.add("w-8", "border", "border-gray-600", "rounded", "mr-2", "p-1")
+      qty.placeholder = "QTY"
+
+      // REMOVE element
+      const remove = document.createElement("div");
+      remove.innerText = "X";
+      remove.classList.add("w-8", "h-8", "text-white", "bg-red-500", "rounded", "text-center", "hover:bg-red-200", "cursor-pointer");
+      remove.onclick = () => {
+        if (confirm(`Remove "${item}"" ?`)) {
+          order[item] = undefined
+          updateorder()
+        }
+      }
+
+      // Combine QTY and REMOVE elements
+      const qty_remove = document.createElement("div");
+      qty_remove.classList.add("flex")
+      qty_remove.appendChild(qty);
+      qty_remove.appendChild(remove);
+
+      const itemDive = document.createElement("div");
+      itemDive.innerText = item;
+
+      const d = document.createElement("div");
+      d.classList.add("even:bg-gray-200", "p-2")
+      d.appendChild(itemDive);
+      d.appendChild(qty_remove);
+
+      o.appendChild(d);
+    }
+    if (totalQty && totalQty > 0)
+      document.getElementById("submit").classList.remove("hidden")
+    else document.getElementById("submit").classList.add("hidden")
   }
 
   function updateproducts() {
     let plist = document.getElementById("products-list");
-    let search_string = document.getElementById("search").value
-    let filtered_products = {{ products | tojson }}.filter(function (p) { return p.item.toUpperCase().indexOf(search_string.toUpperCase()) !== -1; });;
-    plist.innerHTML = ""
-    for (p of filtered_products) {
-      let d = document.createElement("div")
-      d.classList.add("p-2");
-      d.innerText = p.item;
-      plist.appendChild(d);
-    }
+    let search_string = document.getElementById("search").value;
+    let filtered_products = {{ products | tojson
+  }}.filter(p => p.item.toUpperCase().indexOf(search_string.toUpperCase()) !== -1);
+  plist.innerHTML = "";
+  for (p of filtered_products) {
+    let d = document.createElement("div");
+    d.classList.add("p-2", "cursor-pointer", "hover:bg-green-100");
+    d.onclick = addproduct(p.item);
+    d.innerText = p.item;
+    plist.appendChild(d);
   }
-  function filterFunction() {
-    var input, filter, ul, li, a, i;
-    input = document.getElementById("item-search");
-    filter = input.value.toUpperCase();
-    div = document.getElementById("myDropdown");
-    a = div.getElementsByTagName("a");
-    for (i = 0; i < a.length; i++) {
-      txtValue = a[i].textContent || a[i].innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        a[i].style.display = "";
-      } else {
-        a[i].style.display = "none";
-      }
-    }
   }
 </script>
 {% endblock %}
