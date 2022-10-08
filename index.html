@@ -16,7 +16,7 @@
     <div id="party-details" class="m-12">
       <div class="relative mt-4">
         <input type="text" name="name" id="name" required
-          class="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-green-600 placeholder-transparent"
+          class="peer uppercase h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-green-600 placeholder-transparent"
           placeholder="." />
         <label for="name"
           class="absolute -top-3.5 left-0 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">
@@ -25,7 +25,7 @@
       </div>
       <div class="relative mt-4">
         <input list="regions" name="region" id="region" placeholder="." required
-          class="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-green-600 placeholder-transparent" />
+          class="peer uppercase h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-green-600 placeholder-transparent" />
         <label for="region"
           class="absolute -top-3.5 left-0 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">
           Region
@@ -113,6 +113,10 @@
       qty.value = order[item];
       qty.classList.add("w-8", "border", "border-gray-600", "rounded", "mr-2", "p-1")
       qty.placeholder = "QTY"
+      qty.onchange = () => {
+        order[item] = qty.value;
+        updateorder()
+      }
 
       // REMOVE element
       const remove = document.createElement("div");
@@ -135,7 +139,7 @@
       itemDive.innerText = item;
 
       const d = document.createElement("div");
-      d.classList.add("flex" ,"justify-between", "even:bg-gray-200", "p-2")
+      d.classList.add("flex", "justify-between", "even:bg-gray-200", "p-2")
       d.appendChild(itemDive);
       d.appendChild(qty_remove);
 

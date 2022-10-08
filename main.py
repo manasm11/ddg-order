@@ -1,13 +1,28 @@
 # Importing Module
+from datetime import datetime
+import os
 import json
 import xlrd
-from fastapi import FastAPI, Request, Form
+from fastapi import FastAPI, Request, Form, Depends, BackgroundTasks
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
+
+import os
+import smtplib
+from email.message import EmailMessage
+
+EMAIL_FROM = open("email").read().strip()
+PASSWORD = open("password").read().strip()
+EMAIL_TO = open("emailto").read().strip()
+
+ADMIN_USERNAME = open("admin_username").read().strip()
+ADMIN_PASSWORD = open("admin_password").read().strip()
 
 templates = Jinja2Templates(directory=".")
 
+security = HTTPBasic()
 
 app = FastAPI()
 
@@ -24,16 +39,79 @@ async def root(request: Request):
     )
 
 
+@app.get("/admin")
+async def root(request: Request, credentials: HTTPBasicCredentials = Depends(security)):
+    if (
+        credentials.username == ADMIN_USERNAME
+        and credentials.password == ADMIN_PASSWORD
+    ):
+        if not os.path.exists("orders/"):
+            os.mkdir("orders")
+        return templates.TemplateResponse(
+            "admin.html",
+            context={
+                "request": request,
+                "orders": reversed(os.listdir("orders")),
+            },
+        )
+    else:
+        return "WRONG CREDENTIALS !!!"
+
+
 @app.post("/order")
 async def order(
-    name: str = Form(), region: str = Form(), contact: str = Form(), items: str = Form()
+    bg: BackgroundTasks,
+    name: str = Form(),
+    region: str = Form(),
+    contact: str = Form(),
+    items: str = Form(),
 ):
-    items = json.loads(items)
-    print(f"name={name}, region={region}, contact={contact}, items={items}")
+    name = name.upper()
+    region = region.upper()
+    items: dict = json.loads(items)
+    billno: int = datetime.now().timestamp() * 10000 % 16650000000000
+    bill = f"ONL{int(billno)}"
+    print(
+        f"name={name}, region={region}, contact={contact}, items={items}, bill={bill}"
+    )
+    csv_data = [f"{k},{v},{bill}\n" for k, v in items.items()]
+    if not os.path.exists("orders/"):
+        os.mkdir("orders")
+    date_time = datetime.now().isoformat().replace("T", " ").split(".")[0]
+    csv_path = f"orders/{date_time}__{name}__{region}__{contact}__{bill}.csv"
+    with open(csv_path, "w") as f:
+        f.write("Item Name,Quantity,Bill No.\n")
+        f.writelines(csv_data)
+
+    bg.add_task(send_mail, csv_path)
     return FileResponse("order_placed.html")
 
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount(
+    "/orders",
+    StaticFiles(directory="orders", html=True, check_dir=False),
+    name="orders",
+)
+
+
+def send_mail(csv_path: str):
+    # orders/2022-10-09 00:12:04__SOME SHOP__HAIDRABAD__8400640404__ONL2545244043.csv
+    _, shopname, region, contact, _ = csv_path.split("__")
+    msg = EmailMessage()
+    msg["Subject"] = f"Order: {shopname} {region}"
+    msg["From"] = EMAIL_FROM
+    msg["To"] = EMAIL_FROM
+
+    msg.set_content(
+        f"Order from {shopname} {region}, contact {contact} for more detail."
+    )
+
+    msg.add_attachment(open(csv_path).read(), filename=csv_path.split("/")[-1])
+
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+        smtp.login(EMAIL_FROM, PASSWORD)
+        smtp.send_message(msg)
 
 
 def parse_stock_excel(filepath: str):
