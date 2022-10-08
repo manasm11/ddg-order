@@ -1,10 +1,23 @@
 # Importing Module
+from datetime import datetime
+import os
+import tempfile
+import ssl
 import json
 import xlrd
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+
+from email.mime.multipart import MIMEMultipart
+from email.mime.application import MIMEApplication
+from email.mime.text import MIMEText
+import smtplib
+
+EMAIL_FROM = open("email").read()
+PASSWORD = open("password").read()
+EMAIL_TO = open("emailto").read()
 
 templates = Jinja2Templates(directory=".")
 
@@ -28,12 +41,54 @@ async def root(request: Request):
 async def order(
     name: str = Form(), region: str = Form(), contact: str = Form(), items: str = Form()
 ):
-    items = json.loads(items)
-    print(f"name={name}, region={region}, contact={contact}, items={items}")
+    items: dict = json.loads(items)
+    billno: int = datetime.now().timestamp() * 10000 % 16650000000000
+    bill = f"ONL{int(billno)}"
+    print(
+        f"name={name}, region={region}, contact={contact}, items={items}, bill={bill}"
+    )
+    csv_data = [f"{k},{v},{bill}\n" for k, v in items.items()]
+    with tempfile.NamedTemporaryFile(
+        "w",
+        suffix=".csv",
+        prefix=f"{name}###{region}###{contact}###".replace(" ", "_"),
+        delete=False,
+    ) as f:
+        f.writelines(csv_data)
+        send_mail(f.name)
     return FileResponse("order_placed.html")
 
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+
+def send_mail(csv_path: str):
+    # Create a multipart message
+    shop, region, contact, *_ = csv_path.split("###")
+    shop = shop.replace("_", " ")
+    region = region.replace("_", " ")
+    msg = MIMEMultipart()
+    body_part = MIMEText("ORDER !!!", "plain")
+    msg["Subject"] = f"Order from '{shop}' {region}, {contact}"
+    msg["From"] = EMAIL_FROM
+    msg["To"] = EMAIL_TO
+    # Add body to email
+    msg.attach(body_part)
+    # open and read the CSV file in binary
+    with open(csv_path, "rb") as file:
+        # Attach the file with filename to the email
+        msg.attach(MIMEApplication(file.read(), Name=os.path.basename(csv_path)))
+
+    context = ssl.create_default_context()
+
+    # Create SMTP object
+    smtp_obj = smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context)
+    # Login to the server
+    smtp_obj.login(EMAIL_FROM, PASSWORD)
+
+    # Convert the message to a string and send it
+    smtp_obj.sendmail(msg["From"], msg["To"], msg.as_string())
+    smtp_obj.quit()
 
 
 def parse_stock_excel(filepath: str):
