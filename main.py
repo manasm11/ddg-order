@@ -1,26 +1,26 @@
 # Importing Module
 from datetime import datetime
 import os
-import tempfile
-import ssl
 import json
 import xlrd
-from fastapi import FastAPI, Request, Form
+from fastapi import FastAPI, Request, Form, Depends, BackgroundTasks
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
-from email.mime.multipart import MIMEMultipart
-from email.mime.application import MIMEApplication
-from email.mime.text import MIMEText
 import smtplib
 
-EMAIL_FROM = open("email").read()
-PASSWORD = open("password").read()
-EMAIL_TO = open("emailto").read()
+EMAIL_FROM = open("email").read().strip()
+PASSWORD = open("password").read().strip()
+EMAIL_TO = open("emailto").read().strip()
+
+ADMIN_USERNAME = open("admin_username").read().strip()
+ADMIN_PASSWORD = open("admin_password").read().strip()
 
 templates = Jinja2Templates(directory=".")
 
+security = HTTPBasic()
 
 app = FastAPI()
 
@@ -37,9 +37,32 @@ async def root(request: Request):
     )
 
 
+@app.get("/admin")
+async def root(request: Request, credentials: HTTPBasicCredentials = Depends(security)):
+    if (
+        credentials.username == ADMIN_USERNAME
+        and credentials.password == ADMIN_PASSWORD
+    ):
+        if not os.path.exists("orders/"):
+            os.mkdir("orders")
+        return templates.TemplateResponse(
+            "admin.html",
+            context={
+                "request": request,
+                "orders": reversed(os.listdir("orders")),
+            },
+        )
+    else:
+        return "WRONG CREDENTIALS !!!"
+
+
 @app.post("/order")
 async def order(
-    name: str = Form(), region: str = Form(), contact: str = Form(), items: str = Form()
+    bg: BackgroundTasks,
+    name: str = Form(),
+    region: str = Form(),
+    contact: str = Form(),
+    items: str = Form(),
 ):
     items: dict = json.loads(items)
     billno: int = datetime.now().timestamp() * 10000 % 16650000000000
@@ -48,47 +71,43 @@ async def order(
         f"name={name}, region={region}, contact={contact}, items={items}, bill={bill}"
     )
     csv_data = [f"{k},{v},{bill}\n" for k, v in items.items()]
-    with tempfile.NamedTemporaryFile(
-        "w",
-        suffix=".csv",
-        prefix=f"{name}###{region}###{contact}###".replace(" ", "_"),
-        delete=False,
-    ) as f:
+    if not os.path.exists("orders/"):
+        os.mkdir("orders")
+    date_time = datetime.now().isoformat().replace("T", " ").split(".")[0]
+    csv_path = f"orders/{date_time}__{name}__{region}__{contact}__{bill}.csv"
+    with open(csv_path, "w") as f:
+        f.write("Item Name,Quantity,Bill No.\n")
         f.writelines(csv_data)
-        send_mail(f.name)
+
+    bg.add_task(send_mail, csv_path)
     return FileResponse("order_placed.html")
 
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount(
+    "/orders",
+    StaticFiles(directory="orders", html=True, check_dir=False),
+    name="orders",
+)
 
 
 def send_mail(csv_path: str):
     # Create a multipart message
-    shop, region, contact, *_ = csv_path.split("###")
-    shop = shop.replace("_", " ")
-    region = region.replace("_", " ")
-    msg = MIMEMultipart()
-    body_part = MIMEText("ORDER !!!", "plain")
-    msg["Subject"] = f"Order from '{shop}' {region}, {contact}"
-    msg["From"] = EMAIL_FROM
-    msg["To"] = EMAIL_TO
-    # Add body to email
-    msg.attach(body_part)
-    # open and read the CSV file in binary
-    with open(csv_path, "rb") as file:
-        # Attach the file with filename to the email
-        msg.attach(MIMEApplication(file.read(), Name=os.path.basename(csv_path)))
+    shop, region, contact, *_ = csv_path.split("__")
+    shop = shop.replace("#", " ").split("/")[-1]
+    region = region.replace("#", " ")
+    subject = f"Order: '{shop}' {region}, {contact}"
+    body = open(csv_path).read()
+    with smtplib.SMTP("smtp.gmail.com", 587) as smtp:
+        smtp.ehlo()
+        smtp.starttls()
+        smtp.ehlo()
 
-    context = ssl.create_default_context()
+        smtp.login(EMAIL_FROM, PASSWORD)
 
-    # Create SMTP object
-    smtp_obj = smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context)
-    # Login to the server
-    smtp_obj.login(EMAIL_FROM, PASSWORD)
+        msg = f"Subject: {subject}\n\n{body}"
 
-    # Convert the message to a string and send it
-    smtp_obj.sendmail(msg["From"], msg["To"], msg.as_string())
-    smtp_obj.quit()
+        smtp.sendmail(EMAIL_FROM, EMAIL_TO, msg)
 
 
 def parse_stock_excel(filepath: str):
