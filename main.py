@@ -9,7 +9,9 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
+import os
 import smtplib
+from email.message import EmailMessage
 
 EMAIL_FROM = open("email").read().strip()
 PASSWORD = open("password").read().strip()
@@ -64,6 +66,8 @@ async def order(
     contact: str = Form(),
     items: str = Form(),
 ):
+    name = name.upper()
+    region = region.upper()
     items: dict = json.loads(items)
     billno: int = datetime.now().timestamp() * 10000 % 16650000000000
     bill = f"ONL{int(billno)}"
@@ -92,22 +96,22 @@ app.mount(
 
 
 def send_mail(csv_path: str):
-    # Create a multipart message
-    shop, region, contact, *_ = csv_path.split("__")
-    shop = shop.replace("#", " ").split("/")[-1]
-    region = region.replace("#", " ")
-    subject = f"Order: '{shop}' {region}, {contact}"
-    body = open(csv_path).read()
-    with smtplib.SMTP("smtp.gmail.com", 587) as smtp:
-        smtp.ehlo()
-        smtp.starttls()
-        smtp.ehlo()
+    # orders/2022-10-09 00:12:04__SOME SHOP__HAIDRABAD__8400640404__ONL2545244043.csv
+    _, shopname, region, contact, _ = csv_path.split("__")
+    msg = EmailMessage()
+    msg["Subject"] = f"Order: {shopname} {region}"
+    msg["From"] = EMAIL_FROM
+    msg["To"] = EMAIL_FROM
 
+    msg.set_content(
+        f"Order from {shopname} {region}, contact {contact} for more detail."
+    )
+
+    msg.add_attachment(open(csv_path).read(), filename=csv_path.split("/")[-1])
+
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
         smtp.login(EMAIL_FROM, PASSWORD)
-
-        msg = f"Subject: {subject}\n\n{body}"
-
-        smtp.sendmail(EMAIL_FROM, EMAIL_TO, msg)
+        smtp.send_message(msg)
 
 
 def parse_stock_excel(filepath: str):
