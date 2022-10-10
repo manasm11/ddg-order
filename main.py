@@ -34,7 +34,7 @@ app = FastAPI()
 @app.get("/")
 async def root(request: Request):
     return templates.TemplateResponse(
-        "html/index.html",
+        "index.html",
         context={
             "regions": regions,
             "request": request,
@@ -52,7 +52,7 @@ async def root(request: Request, credentials: HTTPBasicCredentials = Depends(sec
         if not os.path.exists("orders/"):
             os.mkdir("orders")
         return templates.TemplateResponse(
-            "html/admin.html",
+            "admin.html",
             context={
                 "request": request,
                 "orders": reversed(os.listdir("orders")),
