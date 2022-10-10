@@ -58,7 +58,11 @@ async def root(request: Request, credentials: HTTPBasicCredentials = Depends(sec
             "admin.html",
             context={
                 "request": request,
-                "orders": reversed(os.listdir("orders")),
+                "orders": sorted(
+                    os.listdir("orders"),
+                    key=lambda o: os.path.getctime(f"orders/{o}"),
+                    reverse=True,
+                ),
             },
         )
     else:
