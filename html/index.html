@@ -84,6 +84,7 @@
 
   function addproduct(item) {
     return () => {
+      document.getElementById("search").value = "";
       if (order[item] == undefined) {
         order[item] = 1;
       }
