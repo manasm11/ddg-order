@@ -13,12 +13,12 @@ import os
 import smtplib
 from email.message import EmailMessage
 
-EMAIL_FROM = open("email").read().strip()
-PASSWORD = open("password").read().strip()
-EMAIL_TO = open("emailto").read().strip()
+EMAIL_FROM = open("conf/email").read().strip()
+PASSWORD = open("conf/password").read().strip()
+EMAIL_TO = open("conf/emailto").read().strip()
 
-ADMIN_USERNAME = open("admin_username").read().strip()
-ADMIN_PASSWORD = open("admin_password").read().strip()
+ADMIN_USERNAME = open("conf/admin_username").read().strip()
+ADMIN_PASSWORD = open("conf/admin_password").read().strip()
 
 templates = Jinja2Templates(directory=".")
 
