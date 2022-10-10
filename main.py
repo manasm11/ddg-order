@@ -30,7 +30,7 @@ app = FastAPI()
 @app.get("/")
 async def root(request: Request):
     return templates.TemplateResponse(
-        "index.html",
+        "html/index.html",
         context={
             "regions": regions,
             "request": request,
@@ -48,7 +48,7 @@ async def root(request: Request, credentials: HTTPBasicCredentials = Depends(sec
         if not os.path.exists("orders/"):
             os.mkdir("orders")
         return templates.TemplateResponse(
-            "admin.html",
+            "html/admin.html",
             context={
                 "request": request,
                 "orders": reversed(os.listdir("orders")),
@@ -84,7 +84,7 @@ async def order(
         f.writelines(csv_data)
 
     bg.add_task(send_mail, csv_path)
-    return FileResponse("order_placed.html")
+    return FileResponse("html/order_placed.html")
 
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
