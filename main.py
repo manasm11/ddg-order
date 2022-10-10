@@ -110,14 +110,10 @@ app.mount(
 
 
 def save_uploaded_file(file: UploadFile):
-    path = ""
-    try:
-        with NamedTemporaryFile(delete=False) as tmp:
-            shutil.copyfileobj(file.file, tmp)
-            path = tmp.name
-    finally:
+    with NamedTemporaryFile(delete=False) as tmp:
+        shutil.copyfileobj(file.file, tmp)
         file.file.close()
-    return path
+        return tmp.name
 
 
 def send_mail(csv_path: str):
@@ -171,10 +167,7 @@ def parse_stock_excel(filepath: str):
 if __name__ == "__main__":
     import uvicorn
 
-    # result = parse_stock_excel("temp/STOCK_SAMPLE.XLS")
-    # {print(d) for d in result}
-    # print("Length:", len(result))
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, log_level="debug", reload=True)
+    uvicorn.run("main:app", port=8001, log_level="debug", reload=True)
 
 
 regions = [
