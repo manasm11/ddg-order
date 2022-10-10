@@ -3,12 +3,14 @@ from datetime import datetime
 import os
 import json
 import xlrd
-from fastapi import FastAPI, Request, Form, Depends, BackgroundTasks
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, Request, Form, Depends, BackgroundTasks, UploadFile
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from tempfile import NamedTemporaryFile
 
+import shutil
 import os
 import smtplib
 from email.message import EmailMessage
@@ -20,7 +22,9 @@ EMAIL_TO = open("conf/emailto").read().strip()
 ADMIN_USERNAME = open("conf/admin_username").read().strip()
 ADMIN_PASSWORD = open("conf/admin_password").read().strip()
 
-templates = Jinja2Templates(directory=".")
+CURRENT_STOCK = json.load(open("stock.json")) if os.path.exists("stock.json") else []
+
+templates = Jinja2Templates(directory="html")
 
 security = HTTPBasic()
 
@@ -34,7 +38,7 @@ async def root(request: Request):
         context={
             "regions": regions,
             "request": request,
-            "products": parse_stock_excel("temp/STOCK_SAMPLE.XLS"),
+            "products": CURRENT_STOCK,
         },
     )
 
@@ -87,12 +91,33 @@ async def order(
     return FileResponse("html/order_placed.html")
 
 
+@app.post("/uploadstock/")
+async def create_upload_file(stock: UploadFile):
+    global CURRENT_STOCK
+    temp_file_path = save_uploaded_file(stock)
+    CURRENT_STOCK = parse_stock_excel(temp_file_path)
+    with open("stock.json", "w") as f:
+        json.dump(CURRENT_STOCK, f)
+    return RedirectResponse("/admin", 301)
+
+
 app.mount("/static", StaticFiles(directory="static"), name="static")
 app.mount(
     "/orders",
     StaticFiles(directory="orders", html=True, check_dir=False),
     name="orders",
 )
+
+
+def save_uploaded_file(file: UploadFile):
+    path = ""
+    try:
+        with NamedTemporaryFile(delete=False) as tmp:
+            shutil.copyfileobj(file.file, tmp)
+            path = tmp.name
+    finally:
+        file.file.close()
+    return path
 
 
 def send_mail(csv_path: str):

@@ -9,6 +9,12 @@
 </head>
 
 <body>
+    <form style="background-color: bisque; padding: 1rem;" action="/uploadstock" method="POST"
+        enctype="multipart/form-data">
+        <label for="stock">Upload Stock Excel</label>
+        <input style="margin: 1rem;" type="file" id="stock" name="stock">
+        <button style="margin: 1rem;" type="submit">Upload</button>
+    </form>
     {% for order in orders %}
     <div>
         <a href="orders/{{ order }}">{{ order }}</a>
