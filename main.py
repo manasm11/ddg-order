@@ -141,9 +141,9 @@ def parse_stock_excel(filepath: str):
     # Storing the first sheet into a variable
     sheet: xlrd.sheet.Sheet = wb.sheet_by_index(0)
     # Defining column variables
-    ITEM = 0
-    QTY = 1
-    MRP = 2
+    ITEM = 1
+    QTY = 3
+    MRP = 9
 
     def is_positive_num(cell: xlrd.sheet.Cell):
         v = cell.value
@@ -156,8 +156,8 @@ def parse_stock_excel(filepath: str):
         if is_positive_num(row[QTY]) and is_positive_num(row[MRP]):
             result.append(
                 {
-                    # "qty": row[QTY].value,
-                    # "mrp": row[MRP].value,
+                    "qty": row[QTY].value,
+                    "mrp": row[MRP].value,
                     "item": row[ITEM].value,
                 }
             )
