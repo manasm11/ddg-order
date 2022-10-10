@@ -9,11 +9,10 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from tempfile import NamedTemporaryFile
+import requests
 
 import shutil
 import os
-import smtplib
-from email.message import EmailMessage
 
 EMAIL_FROM = open("conf/email").read().strip()
 PASSWORD = open("conf/password").read().strip()
@@ -22,7 +21,11 @@ EMAIL_TO = open("conf/emailto").read().strip()
 ADMIN_USERNAME = open("conf/admin_username").read().strip()
 ADMIN_PASSWORD = open("conf/admin_password").read().strip()
 
+TG_BOT_TOKEN = open("conf/tg_bot").read().strip()
+TG_CHAT_IDS = open("conf/tg_chat").readlines()
+
 CURRENT_STOCK = json.load(open("stock.json")) if os.path.exists("stock.json") else []
+
 
 templates = Jinja2Templates(directory="html")
 
@@ -87,7 +90,7 @@ async def order(
         f.write("Item Name,Quantity,Bill No.\n")
         f.writelines(csv_data)
 
-    bg.add_task(send_mail, csv_path)
+    bg.add_task(send_notification, csv_path)
     return FileResponse("html/order_placed.html")
 
 
@@ -116,23 +119,17 @@ def save_uploaded_file(file: UploadFile):
         return tmp.name
 
 
-def send_mail(csv_path: str):
+def send_notification(csv_path: str):
     # orders/2022-10-09 00:12:04__SOME SHOP__HAIDRABAD__8400640404__ONL2545244043.csv
     _, shopname, region, contact, _ = csv_path.split("__")
-    msg = EmailMessage()
-    msg["Subject"] = f"Order: {shopname} {region}"
-    msg["From"] = EMAIL_FROM
-    msg["To"] = EMAIL_FROM
 
-    msg.set_content(
-        f"Order from {shopname} {region}, contact {contact} for more detail."
-    )
+    subject = f"{shopname} {region}, {contact}"
 
-    msg.add_attachment(open(csv_path).read(), filename=csv_path.split("/")[-1])
-
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
-        smtp.login(EMAIL_FROM, PASSWORD)
-        smtp.send_message(msg)
+    for TG_CHAT_ID in TG_CHAT_IDS:
+        res = requests.get(
+            f"https://api.telegram.org/bot{TG_BOT_TOKEN}/sendMessage?chat_id={TG_CHAT_ID}&parse_mode=MarkdownV2&text={subject}"
+        )
+        print(res)
 
 
 def parse_stock_excel(filepath: str):
